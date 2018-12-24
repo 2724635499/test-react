@@ -1,28 +1,51 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
+import { connect } from 'react-redux'
+import {increment,decrement} from './actions'
+const buttonStyle = {
+  margin: "20px"  
+}
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+         <div>
+            <button style={buttonStyle} onClick={this.props.Increment}>+</button>
+            <button style={buttonStyle} onClick={this.props.Decrement}>-</button>
+            <span>count :{this.props.value}</span>
+        </div>
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  value: state.value 
+})
+
+const mapDispatchToProps = dispatch => ({
+  Increment:()=>{
+    axios.post('http://47.104.13.253:8090/faceRecognition', {
+      "amount": 120
+    }).then((res1) => {
+      console.log(res1)
+      dispatch(increment())
+    }).catch((err1) => {
+      console.log(err1)
+    })
+
+    
+  },
+  Decrement:()=>{
+      dispatch(decrement())
+  }
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App)
+
+ 
